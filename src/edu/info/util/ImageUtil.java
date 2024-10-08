@@ -48,10 +48,38 @@ public class ImageUtil {
         for (int y = 0; y < img.getHeight(); y++)
             for (int x = 0; x < img.getWidth(); x++) {
 //                img.setRGB(x,y, rand.nextInt(256));
-//                img.getRaster().setSample(x,y,0,rand.nextInt(256));
-//                img.getRaster().setSample(x,y,1,rand.nextInt(256));
+                img.getRaster().setSample(x,y,0,rand.nextInt(256));
+                img.getRaster().setSample(x,y,1,rand.nextInt(256));
                 img.getRaster().setSample(x,y,2,rand.nextInt(256));
             }
         return img;
+    }
+
+    public static BufferedImage extractBand(BufferedImage inImg, char band){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+                int pixel = inImg.getRGB(x,y);
+
+                int alpha = (pixel & 0xff000000) >> 24;
+                int red   = (pixel & 0x00ff0000) >> 16;
+                int green = (pixel & 0x0000ff00) >> 8;
+                int blue  = (pixel & 0x000000ff);
+
+                if(y == 0)
+                    System.out.print(alpha + " " + red + " " + green + " " + blue + " / ");
+
+                switch (band){
+                    case 'R' -> outImg.getRaster().setSample(x,y,0, red);
+                    case 'G' -> outImg.getRaster().setSample(x,y,0, green);
+                    case 'B' -> outImg.getRaster().setSample(x,y,0, blue);
+                    case 'A' -> outImg.getRaster().setSample(x,y,0, alpha);
+                }
+            }
+
+
+
+        return outImg;
     }
 }

@@ -12,14 +12,17 @@ public class MainTest {
 
         BufferedImage inputImg = ImageUtil.loadImage(fileName);
 
-//        ImageUtil.displayImage(inputImg, "Imagine Originala");
+        ImageUtil.displayImage(inputImg, "Imagine Originala");
 //
 //        ImageUtil.saveImage(inputImg, "outImg1.jpg", "jpg");
 //        ImageUtil.saveImage(inputImg, "outImg1.bmp", "bmp");
 //        ImageUtil.saveImage(inputImg, "outImg1.png", "png");
 //        ImageUtil.saveImage(inputImg, "outImg1.gif", "gif");
 
-        ImageUtil.displayImage(ImageUtil.generateRandom(200,200),"Random");
+//        ImageUtil.displayImage(ImageUtil.generateRandom(200,200),"Random");
+        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'R'),"R");
+        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'G'),"G");
+        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'B'),"B");
 
     }
 }
