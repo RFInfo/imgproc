@@ -77,8 +77,35 @@ public class ImageUtil {
                     case 'A' -> outImg.getRaster().setSample(x,y,0, alpha);
                 }
             }
+        return outImg;
+    }
 
+    public static BufferedImage extractBandV2(BufferedImage inImg, int band){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
 
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+                int pixel = inImg.getRaster().getSample(x,y,band);
+                outImg.getRaster().setSample(x,y,0,pixel);
+            }
+        return outImg;
+    }
+
+    public static BufferedImage grayLevelGenerator(int firstGrayLevel, int blockSize, int grayLevelStep, int imgHeight){
+
+        int imgWidth = ((256 - firstGrayLevel) / grayLevelStep) * blockSize;
+
+        BufferedImage outImg = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_BYTE_GRAY);
+
+        for (int y = 0; y < outImg.getHeight(); y++) {
+            int grayLevel = firstGrayLevel;
+            for (int x = 0; x < outImg.getWidth(); x += blockSize) {
+                for (int xi = 0; xi < blockSize; xi++) {
+                    outImg.getRaster().setSample(x + xi, y, 0, grayLevel);
+                }
+                grayLevel += grayLevelStep;
+            }
+        }
 
         return outImg;
     }
