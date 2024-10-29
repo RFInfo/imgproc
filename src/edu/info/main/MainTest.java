@@ -1,6 +1,6 @@
 package edu.info.main;
 
-import edu.info.util.ImageUtil;
+import static edu.info.util.ImageUtil.*;
 
 import java.awt.image.BufferedImage;
 
@@ -9,10 +9,11 @@ public class MainTest {
     public static void main(String[] args) {
 
         String fileName = "./test_images/lena_color_512.bmp";
+//        String fileName = "./test_images/halloween.png";
 
-        BufferedImage inputImg = ImageUtil.loadImage(fileName);
+        BufferedImage inputImg = loadImage(fileName);
 
-        ImageUtil.displayImage(inputImg, "Imagine Originala");
+        displayImage(inputImg, "Imagine Originala");
 //
 //        ImageUtil.saveImage(inputImg, "outImg1.jpg", "jpg");
 //        ImageUtil.saveImage(inputImg, "outImg1.bmp", "bmp");
@@ -20,9 +21,10 @@ public class MainTest {
 //        ImageUtil.saveImage(inputImg, "outImg1.gif", "gif");
 
 //        ImageUtil.displayImage(ImageUtil.generateRandom(200,200),"Random");
-        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'R'),"R");
-        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'G'),"G");
-        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'B'),"B");
+        displayImage(extractBand(inputImg,'R'),"R");
+        displayImage(extractBand(inputImg,'G'),"G");
+        displayImage(extractBand(inputImg,'B'),"B");
+        displayImage(extractBand(inputImg,'A'),"A");
 
     }
 }
