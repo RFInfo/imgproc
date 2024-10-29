@@ -20,9 +20,12 @@ public class MainTest {
 //        ImageUtil.saveImage(inputImg, "outImg1.gif", "gif");
 
 //        ImageUtil.displayImage(ImageUtil.generateRandom(200,200),"Random");
-        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'R'),"R");
-        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'G'),"G");
-        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'B'),"B");
+//        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'R'),"R");
+//        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'G'),"G");
+//        ImageUtil.displayImage(ImageUtil.extractBand(inputImg,'B'),"B");
+
+        // lab05
+        ImageUtil.displayImage(ImageUtil.grayLevelGenerator(0,100,5,600),"GrayLevels");
 
     }
 }
