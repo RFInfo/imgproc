@@ -1,5 +1,7 @@
 package edu.info.main;
 
+import edu.info.util.ImageUtil;
+
 import static edu.info.util.ImageUtil.*;
 
 import java.awt.image.BufferedImage;
@@ -25,6 +27,11 @@ public class MainTest {
         displayImage(extractBand(inputImg,'G'),"G");
         displayImage(extractBand(inputImg,'B'),"B");
         displayImage(extractBand(inputImg,'A'),"A");
+
+        // lab05
+//        ImageUtil.displayImage(ImageUtil.grayLevelGenerator(0,100,5,600),"GrayLevels");
+        ImageUtil.displayImage(ImageUtil.pixelate(inputImg,64),"Pixelate");
+
 
     }
 }
