@@ -45,7 +45,10 @@ public class MainTest {
 //        displayImage(img1);
 //        displayImage(img2);
 
-        ImageUtil.displayImage(ImageUtil.brightnessRGB(inputImg,-50,60, 0),"Brightness RGB");
+//        ImageUtil.displayImage(ImageUtil.brightnessRGB(inputImg,-50,60, 0),"Brightness RGB");
+
+//        BufferedImage img1 = ImageUtil.brightnessRGB(inputImg,-40,0,0);
+        ImageUtil.displayImage(ImageUtil.contrast(inputImg,3.5f),"Contrast");
 
 
     }

@@ -224,6 +224,24 @@ public class ImageUtil {
         return  outImg;
     }
 
+    public static BufferedImage contrast(BufferedImage inImg, float scale){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        short[] contrastLUT = new short[256];
+
+        for (int i = 0; i < contrastLUT.length; i++) {
+            contrastLUT[i] = (short) constrain(Math.round(scale * i));
+            System.out.print(contrastLUT[i] + " ");
+        }
+        System.out.println();
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0,contrastLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg,outImg);
+
+        return  outImg;
+    }
+
     public static int constrain(int val, int min, int max){
         return val > max ? max : (val < min ? min : val);
     }
