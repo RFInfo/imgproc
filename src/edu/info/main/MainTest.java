@@ -1,5 +1,7 @@
 package edu.info.main;
 
+import edu.info.util.BrightnessDlg;
+import edu.info.util.BrightnessRGBDlg;
 import edu.info.util.ImageUtil;
 
 import static edu.info.util.ImageUtil.*;
@@ -48,7 +50,10 @@ public class MainTest {
 //        ImageUtil.displayImage(ImageUtil.brightnessRGB(inputImg,-50,60, 0),"Brightness RGB");
 
 //        BufferedImage img1 = ImageUtil.brightnessRGB(inputImg,-40,0,0);
-        ImageUtil.displayImage(ImageUtil.contrast(inputImg,3.5f),"Contrast");
+//        ImageUtil.displayImage(ImageUtil.contrast(inputImg,3.5f),"Contrast");
+
+//        applySettingsDlg(inputImg, new BrightnessDlg());
+        applySettingsDlg(inputImg, new BrightnessRGBDlg());
 
 
     }
