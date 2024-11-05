@@ -36,13 +36,17 @@ public class MainTest {
 //        ImageUtil.displayImage(ImageUtil.brightnessV1(inputImg,-40),"Brightness -40");
 //        ImageUtil.displayImage(ImageUtil.brightnessV1(inputImg,+40),"Brightness +40");
 //
-        ImageUtil.displayImage(ImageUtil.brightnessV3(inputImg,-40),"Brightness -40");
-        ImageUtil.displayImage(ImageUtil.brightnessV3(inputImg,+40),"Brightness +40");
+//        ImageUtil.displayImage(ImageUtil.brightnessV3(inputImg,-40),"Brightness -40");
+//        ImageUtil.displayImage(ImageUtil.brightnessV3(inputImg,+40),"Brightness +40");
 
 //        BufferedImage img1 = ImageUtil.brightnessV1(inputImg,+100);
 //        BufferedImage img2 = ImageUtil.brightnessV1(img1,-100);
 //
 //        displayImage(img1);
 //        displayImage(img2);
+
+        ImageUtil.displayImage(ImageUtil.brightnessRGB(inputImg,-50,60, 0),"Brightness RGB");
+
+
     }
 }
