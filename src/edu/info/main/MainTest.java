@@ -13,8 +13,8 @@ public class MainTest {
 
     public static void main(String[] args) {
 
-//        String fileName = "./test_images/lena_color_512.bmp";
-        String fileName = "./test_images/ab pattern.bmp";
+        String fileName = "./test_images/lena_color_512.bmp";
+//        String fileName = "./test_images/ab pattern.bmp";
 //        String fileName = "./test_images/halloween.png";
 
         BufferedImage inputImg = loadImage(fileName);
@@ -27,9 +27,9 @@ public class MainTest {
 //        ImageUtil.saveImage(inputImg, "outImg1.gif", "gif");
 
 //        ImageUtil.displayImage(ImageUtil.generateRandom(200,200),"Random");
-//        displayImage(extractBand(inputImg,'R'),"R");
-//        displayImage(extractBand(inputImg,'G'),"G");
-//        displayImage(extractBand(inputImg,'B'),"B");
+        displayImage(extractBand(inputImg,'R'),"R");
+        displayImage(extractBand(inputImg,'G'),"G");
+        displayImage(extractBand(inputImg,'B'),"B");
 //        displayImage(extractBand(inputImg,'A'),"A");
 
         // lab05
@@ -65,14 +65,19 @@ public class MainTest {
 //        displayImage(colorToGray(inputImg, GrayTransforms.GRAY_TRANSFORMS_GREEN), "Color to Gray - G");
 //        displayImage(colorToGray(inputImg, GrayTransforms.GRAY_TRANSFORMS_PAL), "Color to Gray - PAL");
 
-    BufferedImage grayImg = colorToGray(inputImg,GrayTransforms.GRAY_TRANSFORMS_PAL);
-    displayImage(grayImg, "Gray");
-//    BufferedImage binaryImg = threshold(grayImg, 110);
-    BufferedImage binaryImg = applySettingsDlg(grayImg, new ThresholdDlg());
-    binaryImg = negative(binaryImg);
-    displayImage(binaryImg, "Binary");
+//    BufferedImage grayImg = colorToGray(inputImg,GrayTransforms.GRAY_TRANSFORMS_PAL);
+//    displayImage(grayImg, "Gray");
+////    BufferedImage binaryImg = threshold(grayImg, 110);
+//    BufferedImage binaryImg = applySettingsDlg(grayImg, new ThresholdDlg());
+//    binaryImg = negative(binaryImg);
+//    displayImage(binaryImg, "Binary");
+//
+//    BufferedImage resultImg = applyMask(grayImg,binaryImg);
+//    displayImage(resultImg, "ApplyMask");
 
-    BufferedImage resultImg = applyMask(grayImg,binaryImg);
-    displayImage(resultImg, "ApplyMask");
+        histogramSimple(inputImg,2);
+        displayImage(histogramImage(inputImg,0,256,200), "R");
+        displayImage(histogramImage(inputImg,1,256,200), "G");
+        displayImage(histogramImage(inputImg,2,256,200), "B");
     }
 }
