@@ -260,11 +260,86 @@ public class ImageUtil {
         return  outImg;
     }
 
+    public static BufferedImage contrastGamma(BufferedImage inImg, double gamma){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        short[] contrastLUT = new short[256];
+
+        for (int i = 0; i < contrastLUT.length; i++) {
+
+            double a = i / 255.0; // scale to [0.0 ... 1.0]
+            double b = Math.pow(a, 1.0/gamma);
+            double c = b * 255.0; // scale to [0 ... 255]
+
+            contrastLUT[i] = (short) constrain((int)Math.round(c));
+            System.out.print(contrastLUT[i] + " ");
+        }
+        System.out.println();
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0,contrastLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg,outImg);
+
+        return  outImg;
+    }
+
     public static int constrain(int val, int min, int max){
         return val > max ? max : (val < min ? min : val);
     }
 
     public static int constrain(int val){
         return constrain(val,0,255);
+    }
+
+    public enum GrayTransforms {
+        GRAY_TRANSFORMS_GREEN, GRAY_TRANSFORMS_SQRT,
+        GRAY_TRANSFORMS_AVG, GRAY_TRANSFORMS_USUAL, GRAY_TRANSFORMS_PAL
+    }
+
+    public static BufferedImage colorToGray(BufferedImage inImg, GrayTransforms version){
+        if(inImg.getRaster().getNumBands() == 1)
+            return inImg;
+
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+                int r = inImg.getRaster().getSample(x,y,0);
+                int g = inImg.getRaster().getSample(x,y,1);
+                int b = inImg.getRaster().getSample(x,y,2);
+
+                int grayLevel = 0;
+                switch (version) {
+                    case GRAY_TRANSFORMS_GREEN -> grayLevel = g;
+                    case GRAY_TRANSFORMS_SQRT -> grayLevel =
+                            constrain((int) Math.round(Math.sqrt(r * r + g * g + b * b)));
+                    case GRAY_TRANSFORMS_AVG -> grayLevel =
+                            constrain((int) Math.round((double) (r + g + b) / 3));
+                    case GRAY_TRANSFORMS_USUAL -> grayLevel =
+                            constrain((int) Math.round((double) (3 * r + 2 * g + 4 * b) / 9));
+                    case GRAY_TRANSFORMS_PAL -> grayLevel =
+                            constrain((int) Math.round(0.299 * r + 0.587 * g + 0.114 * b));
+                }
+
+                outImg.getRaster().setSample(x,y,0, grayLevel);
+            }
+
+        return outImg;
+    }
+
+    public static BufferedImage threshold(BufferedImage inImg, int threshold) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+
+        short[] thresholdLUT = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            thresholdLUT[i] = (short)((i<threshold) ? 0 : 255);
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0,thresholdLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg,outImg);
+
+        return outImg;
     }
 }

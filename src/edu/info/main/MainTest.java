@@ -12,7 +12,8 @@ public class MainTest {
 
     public static void main(String[] args) {
 
-        String fileName = "./test_images/lena_color_512.bmp";
+//        String fileName = "./test_images/lena_color_512.bmp";
+        String fileName = "./test_images/rice.bmp";
 //        String fileName = "./test_images/halloween.png";
 
         BufferedImage inputImg = loadImage(fileName);
@@ -53,8 +54,19 @@ public class MainTest {
 //        ImageUtil.displayImage(ImageUtil.contrast(inputImg,3.5f),"Contrast");
 
 //        applySettingsDlg(inputImg, new BrightnessDlg());
-        applySettingsDlg(inputImg, new BrightnessRGBDlg());
+//        applySettingsDlg(inputImg, new BrightnessRGBDlg());
 
+        // lab07
 
+//        displayImage(contrastGamma(inputImg,2.5), "Gamma 2.5");
+
+//        displayImage(colorToGray(inputImg, GrayTransforms.GRAY_TRANSFORMS_AVG), "Color to Gray - AVG");
+//        displayImage(colorToGray(inputImg, GrayTransforms.GRAY_TRANSFORMS_GREEN), "Color to Gray - G");
+//        displayImage(colorToGray(inputImg, GrayTransforms.GRAY_TRANSFORMS_PAL), "Color to Gray - PAL");
+
+    BufferedImage grayImg = colorToGray(inputImg,GrayTransforms.GRAY_TRANSFORMS_PAL);
+    displayImage(grayImg, "Gray");
+    BufferedImage binaryImg = threshold(grayImg, 110);
+    displayImage(binaryImg, "Binary");
     }
 }
