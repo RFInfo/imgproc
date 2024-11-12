@@ -3,6 +3,7 @@ package edu.info.main;
 import edu.info.util.BrightnessDlg;
 import edu.info.util.BrightnessRGBDlg;
 import edu.info.util.ImageUtil;
+import edu.info.util.ThresholdDlg;
 
 import static edu.info.util.ImageUtil.*;
 
@@ -13,7 +14,7 @@ public class MainTest {
     public static void main(String[] args) {
 
 //        String fileName = "./test_images/lena_color_512.bmp";
-        String fileName = "./test_images/rice.bmp";
+        String fileName = "./test_images/ab pattern.bmp";
 //        String fileName = "./test_images/halloween.png";
 
         BufferedImage inputImg = loadImage(fileName);
@@ -66,7 +67,12 @@ public class MainTest {
 
     BufferedImage grayImg = colorToGray(inputImg,GrayTransforms.GRAY_TRANSFORMS_PAL);
     displayImage(grayImg, "Gray");
-    BufferedImage binaryImg = threshold(grayImg, 110);
+//    BufferedImage binaryImg = threshold(grayImg, 110);
+    BufferedImage binaryImg = applySettingsDlg(grayImg, new ThresholdDlg());
+    binaryImg = negative(binaryImg);
     displayImage(binaryImg, "Binary");
+
+    BufferedImage resultImg = applyMask(grayImg,binaryImg);
+    displayImage(resultImg, "ApplyMask");
     }
 }

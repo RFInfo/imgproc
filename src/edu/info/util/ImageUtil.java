@@ -342,4 +342,44 @@ public class ImageUtil {
 
         return outImg;
     }
+
+    public static BufferedImage negative(BufferedImage inImg) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        short[] negativeLUT = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            negativeLUT[i] = (short)(255 - i);
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0,negativeLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg,outImg);
+
+        return outImg;
+    }
+
+    public static BufferedImage applyMask(BufferedImage inImg, BufferedImage maskImg){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(), inImg.getType());
+
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++)
+                if(maskImg.getRaster().getSample(x,y,0) > 0 ){
+                    int pixel = inImg.getRGB(x,y);
+                    outImg.setRGB(x,y,pixel);
+                }
+        return outImg;
+    }
+
+    static public BufferedImage getBitPlane(BufferedImage inImg, int bitLevel){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+                int pixel = inImg.getRaster().getSample(x,y,0);
+                pixel = (pixel >>> bitLevel) & 1;
+                outImg.getRaster().setSample(x,y,0,pixel);
+            }
+        return outImg;
+    }
 }
