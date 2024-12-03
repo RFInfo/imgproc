@@ -24,8 +24,8 @@ public class HistogramTest {
         displayImage(extractBand(inputImg,'B'),"B");
 
         // print histogram values for band 2 (Blue)
-        for(double v : histogramSimple(inputImg, 2))
-            System.out.print(String.format("%, .5f",v));
+//        for(double v : histogramSimple(inputImg, 2))
+//            System.out.print(String.format("%, .5f",v));
 
 
         displayImage(histogramImage(inputImg,0,256,200), "R");

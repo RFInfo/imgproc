@@ -400,7 +400,7 @@ public class ImageUtil {
             histogram[i] = histogram[i] / totalNrOfPixels;
         }
 
-//        System.out.println(Arrays.toString(histogram));
+        System.out.println(Arrays.toString(histogram));
 
         return histogram;
     }
@@ -434,6 +434,72 @@ public class ImageUtil {
         }
 
         g2.dispose();
+        return outImg;
+    }
+
+    // normalize a value
+    public static int normalize(int val, int oldMin, int oldMax, int newMin, int newMax){
+        double c = 1.0 * (newMax - newMin)/(oldMax - oldMin);
+        return (int)Math.round(c * (val-oldMin) + newMin);
+    }
+
+    // normalize a LUT
+    static void normalize(short[] lut, int newMin, int newMax) {
+        short max = Short.MIN_VALUE;
+        short min = Short.MAX_VALUE;
+
+        // find max and min
+        for (int i = 0; i < lut.length; i++) {
+            if (lut[i] > max)
+                max = lut[i];
+            if (lut[i] < min)
+                min = lut[i];
+        }
+
+        // (x-min)(255-0)/(max-min)+0
+        // (x-min)(newMax-newMin)/(max-min)+newMin
+        double c = 1.0 * (newMax - newMin) / (max - min);
+
+        System.out.println("\r\n"+"max= "+max+" min= "+min+" c= "+c );
+        // build output
+        for (int i = 0; i < lut.length; i++) {
+            lut[i] = (short) ((lut[i] - min) * c + newMin);
+            System.out.print(lut[i] + " ");
+        }
+        // System.out.println("\r\n"+"max= "+max+" min= "+min+" c= "+c );
+    }
+
+    public static BufferedImage contrastStretch(BufferedImage inImg){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(),inImg.getType());
+
+        short[][] contrastLUT = new short[inImg.getRaster().getNumBands()][256];
+
+        for (int band = 0; band < inImg.getRaster().getNumBands(); band++) {
+            int max = Integer.MIN_VALUE;
+            int min = Integer.MAX_VALUE;
+            int pixel;
+
+            // find max and min
+            for (int y = 0; y < inImg.getHeight(); y++)
+                for (int x = 0; x < inImg.getWidth(); x++) {
+                    pixel = inImg.getRaster().getSample(x,y,band);
+                    if(pixel > max)
+                        max = pixel;
+                    if(pixel < min)
+                        min = pixel;
+                }
+
+            System.out.println("min= " + min + " max= " + max);
+
+            for (int i = min; i <= max; i++) {
+                contrastLUT[band][i] = (short)normalize(i,min, max,0,255);
+            }
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0, contrastLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg, outImg);
+
         return outImg;
     }
 }
