@@ -3,9 +3,7 @@ package edu.info.util;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.LookupOp;
-import java.awt.image.ShortLookupTable;
+import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -499,6 +497,50 @@ public class ImageUtil {
         ShortLookupTable shortLookupTable = new ShortLookupTable(0, contrastLUT);
         LookupOp lookupOp = new LookupOp(shortLookupTable, null);
         lookupOp.filter(inImg, outImg);
+
+        return outImg;
+    }
+
+    public static BufferedImage convolutionSimple(BufferedImage inImg, Kernel kernel) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        // kernel properties
+        // kernel size 2n+1 x 2n+1
+        int kWidth = kernel.getWidth();
+        int kRadius = kWidth / 2;
+        float[] kData = kernel.getKernelData(null);
+        int kDataIndex = 0;
+
+        for (int band = 0; band < inImg.getRaster().getNumBands() && band < 3; band++)
+            for (int y = 0; y < inImg.getHeight(); y++)
+                for (int x = 0; x < inImg.getWidth(); x++) {
+
+                    float gray = 0;
+                    kDataIndex = 0;
+                    // summing neighborhood
+                    for (int ky = -kRadius; ky <= kRadius ; ky++)
+                        for (int kx = -kRadius; kx <= kRadius ; kx++){
+                            if((x+kx) < 0 || (x+kx) > inImg.getWidth()-1 || (y+ky) < 0 || (y+ky) > inImg.getHeight()-1){
+//                                gray+=0;
+                                gray += kData[kDataIndex] * inImg.getRaster().getSample(x, y, band);
+                            }
+                            else {
+                                gray+= kData[kDataIndex] * inImg.getRaster().getSample(x+kx,y+ky,band);
+                            }
+                            kDataIndex++;
+                        }
+                    outImg.getRaster().setSample(x,y,band,constrain(Math.round(gray)));
+
+                }
+
+        return outImg;
+    }
+
+    public static BufferedImage convolution(BufferedImage inImg, Kernel kernel) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        ConvolveOp convolveOp = new ConvolveOp(kernel,ConvolveOp.EDGE_NO_OP,null);
+        convolveOp.filter(inImg,outImg);
 
         return outImg;
     }
