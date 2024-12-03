@@ -400,7 +400,7 @@ public class ImageUtil {
             histogram[i] = histogram[i] / totalNrOfPixels;
         }
 
-        System.out.println(Arrays.toString(histogram));
+//        System.out.println(Arrays.toString(histogram));
 
         return histogram;
     }
