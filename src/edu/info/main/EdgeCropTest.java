@@ -47,9 +47,12 @@ public class EdgeCropTest {
 
 //        BufferedImage sharpImg = convolutionSimple(inputImg,new Kernel(3,3,sharp));
 //        displayImage(sharpImg, "Sharp");
+
+//        BufferedImage sharpImg = convolutionSimple(out,new Kernel(3,3,sharp));
+//        displayImage(sharpImg, "Sharp");
 //
-//        BufferedImage edgeImg = convolutionSimple(thresholdImg,new Kernel(3,3,edge));
-//        displayImage(edgeImg, "Edge");
+        BufferedImage edgeImg = convolutionSimple(thresholdImg,new Kernel(3,3,edge));
+        displayImage(edgeImg, "Edge");
     }
 
 }
