@@ -13,5 +13,12 @@ public class MainTest {
 
         ImageUtil.displayImage(img, "Original");
 
+
+        ImageUtil.displayImage(ImageUtil.extractBands(img, 'R'), "Band R");
+        ImageUtil.displayImage(ImageUtil.extractBands(img, 'G'), "Band G");
+        ImageUtil.displayImage(ImageUtil.extractBands(img, 'B'), "Band B");
+
+
+
     }
 }

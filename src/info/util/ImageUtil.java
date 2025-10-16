@@ -39,4 +39,34 @@ public class ImageUtil {
         frame.pack();
         frame.setVisible(true);
     }
+
+    public static BufferedImage extractBands(BufferedImage inImg, char band){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+                int pixel = inImg.getRGB(x, y);
+
+                int alpha = (pixel & 0xFF000000) >> 24; // (argb >> 24) & 0xff;
+                int red = (pixel & 0x00FF0000) >> 16; // (argb >> 16) & 0xff;
+                int green = (pixel & 0x0000FF00) >> 8;  // (argb >> 8) & 0xff;
+                int blue = (pixel & 0x000000FF);       // (argb) & 0xff;
+
+                // how to recompose?
+                // pixel = 0x00000000 | (alpha << 24) | (red << 16) | (green << 8) | blue;
+
+                if (y == 0)
+                    System.out.println(alpha + " " + red + " " + green + " " + blue);
+
+
+                switch (band) {
+                    case 'A' -> outImg.getRaster().setSample(x, y, 0, alpha);
+                    case 'R' -> outImg.getRaster().setSample(x, y, 0, red);
+                    case 'G' -> outImg.getRaster().setSample(x, y, 0, green);
+                    case 'B' -> outImg.getRaster().setSample(x, y, 0, blue);
+                }
+            }
+
+        return outImg;
+    }
 }
