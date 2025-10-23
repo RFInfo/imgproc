@@ -1,6 +1,6 @@
 package info.main;
 
-import info.util.ImageUtil;
+import static info.util.ImageUtil.*;
 
 import java.awt.image.BufferedImage;
 
@@ -9,14 +9,16 @@ public class MainTest {
 
         String fileName = "./test_images/lena_color_512.bmp";
 
-        BufferedImage img = ImageUtil.loadImage(fileName);
+        BufferedImage img = loadImage(fileName);
 
-        ImageUtil.displayImage(img, "Original");
+        displayImage(img, "Original");
 
 
-        ImageUtil.displayImage(ImageUtil.extractBands(img, 'R'), "Band R");
-        ImageUtil.displayImage(ImageUtil.extractBands(img, 'G'), "Band G");
-        ImageUtil.displayImage(ImageUtil.extractBands(img, 'B'), "Band B");
+//        displayImage(extractBands(img, 'R'), "Band R");
+//        displayImage(extractBands(img, 'G'), "Band G");
+//        displayImage(extractBands(img, 'B'), "Band B");
+
+        displayImage(grayLevelGenerator(0,10,1, 600));
 
 
 

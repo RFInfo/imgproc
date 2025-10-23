@@ -69,4 +69,23 @@ public class ImageUtil {
 
         return outImg;
     }
+
+    public static BufferedImage grayLevelGenerator(int firstGrayLevel, int blockSize, int grayLevelStep, int imgHeight) {
+
+        int imgWidth = ((256 - firstGrayLevel) / grayLevelStep) * blockSize;
+
+        BufferedImage outImg = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_BYTE_GRAY);
+
+        for (int y = 0; y < outImg.getHeight(); y++) {
+            int grayLevel = firstGrayLevel;
+            for (int x = 0; x < outImg.getWidth(); x += blockSize) {
+                for (int xi = 0; xi < blockSize; xi++) {
+                    outImg.getRaster().setSample(x + xi, y, 0, grayLevel);
+                }
+                grayLevel += grayLevelStep;
+            }
+        }
+        return outImg;
+    }
+
 }
