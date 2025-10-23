@@ -18,7 +18,9 @@ public class MainTest {
 //        displayImage(extractBands(img, 'G'), "Band G");
 //        displayImage(extractBands(img, 'B'), "Band B");
 
-        displayImage(grayLevelGenerator(0,10,1, 600));
+//        displayImage(grayLevelGenerator(0,10,1, 600));
+
+        displayImage(pixelate(img,64));
 
 
 

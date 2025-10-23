@@ -88,4 +88,34 @@ public class ImageUtil {
         return outImg;
     }
 
+    public static BufferedImage pixelate(BufferedImage inImg, int blockSize) {
+        BufferedImage outImg = null;
+
+        if (inImg.getWidth() % blockSize != 0 && inImg.getHeight() % blockSize != 0) {
+            System.out.println("wrong image size");
+            return outImg;
+        }
+
+        outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        for (int band = 0; band < inImg.getRaster().getNumBands(); band++)
+            for (int y = 0; y < outImg.getHeight(); y += blockSize) {
+                for (int x = 0; x < outImg.getWidth(); x += blockSize) {
+
+                    // parcurgem blocul
+                    int grayLevelSum = 0;
+                    for (int yi = 0; yi < blockSize; yi++)
+                        for (int xi = 0; xi < blockSize; xi++)
+                            grayLevelSum += inImg.getRaster().getSample(x + xi, y + yi, band);
+
+                    int avgGrayLevel = grayLevelSum / (blockSize * blockSize);
+
+                    for (int yi = 0; yi < blockSize; yi++)
+                        for (int xi = 0; xi < blockSize; xi++)
+                            outImg.getRaster().setSample(x + xi, y + yi, band, avgGrayLevel);
+                }
+            }
+
+        return outImg;
+    }
 }
