@@ -118,4 +118,68 @@ public class ImageUtil {
 
         return outImg;
     }
+
+    public static int constrain(int val, int min, int max){
+        return val > max ? max : (val < min ? min : val);
+    }
+
+    public static int constrain(int val){
+        return constrain(val, 0, 255);
+    }
+
+    public static BufferedImage toGray(BufferedImage input){
+        BufferedImage output = null;
+        output = new
+                BufferedImage(input.getWidth(),input.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        for(int y=0; y<input.getHeight(); y++)
+            for(int x=0; x<input.getWidth(); x++){
+                int r = input.getRaster().getSample(x, y, 0);
+                int g = input.getRaster().getSample(x, y, 1);
+                int b = input.getRaster().getSample(x, y, 2);
+                output.getRaster().setSample(x, y, 0, (r+g+b)/3);
+            }
+        return output;
+    }
+
+    public static BufferedImage toGray(BufferedImage src, int version){
+// 0 - g
+// 1 - sqrt
+// 2 - avg
+// 3 - usual
+// 4 - PAL
+        BufferedImage dst = null;
+        dst = new
+                BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+        for(int y=0; y<src.getHeight(); y++)
+            for(int x=0; x<src.getWidth(); x++){
+                int r = src.getRaster().getSample(x,y,0);
+                int g = src.getRaster().getSample(x,y,1);
+                int b = src.getRaster().getSample(x,y,2);
+                int gray=0;
+                switch (version){
+                    case 0:{
+                        gray = g;
+                        break;
+                    }
+                    case 1:{
+                        gray = constrain((int)Math.round(Math.sqrt(r*r+b*b+g*g)));
+                        break;
+                    }
+                    case 2:{
+                        gray = (r+b+g)/3;
+                        break;
+                    }
+                    case 3:{
+                        gray = (3*r+4*b+2*g)/9;
+                        break;
+                    }
+                    case 4:{
+                        gray = (int)(0.299 * r + 0.587 * g + 0.114 * b);
+                        break;
+                    }
+                }
+                dst.getRaster().setSample(x,y,0,gray);
+            }
+        return dst;
+    }
 }
