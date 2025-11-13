@@ -32,5 +32,8 @@ public class MainTest {
 //        displayImage(toGray(img,2),"Gray Avg");
 //        displayImage(toGray(img,3),"Gray usual");
 //        displayImage(toGray(img,4),"Gray PAL");
+
+
+
     }
 }
