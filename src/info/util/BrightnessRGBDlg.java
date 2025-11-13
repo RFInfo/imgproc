@@ -86,7 +86,7 @@ public class BrightnessRGBDlg extends AbstractSettingsDialog{
         textField2.setText(""+valG);
         textField3.setText(""+valB);
 
-//        BufferedImage img = ImageUtil.brightnessRGB(originalImg, valR, valG, valB);
-//        imagePanel.setImage(img);
+        BufferedImage img = ImageUtil.brightnessRGB(originalImg, valR, valG, valB);
+        imagePanel.setImage(img);
     }
 }

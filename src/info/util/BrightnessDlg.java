@@ -43,7 +43,7 @@ public class BrightnessDlg extends AbstractSettingsDialog{
         int val = slider1.getValue();
         textField1.setText(""+val);
 
-//        BufferedImage img = ImageUtil.brightnessV1(originalImg, val);
-//        imagePanel.setImage(img);
+        BufferedImage img = ImageUtil.brightnessV3(originalImg, val);
+        imagePanel.setImage(img);
     }
 }
