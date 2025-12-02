@@ -2,6 +2,7 @@ package info.main;
 
 import info.util.BrightnessDlg;
 import info.util.BrightnessRGBDlg;
+import info.util.GammaDlg;
 
 import static info.util.ImageUtil.*;
 
@@ -51,7 +52,16 @@ public class MainTest {
 
 //        displayImage(brightnessRGB(img,-50,0,0));
 
-        displayImage(applySettingsDlg(img, new BrightnessRGBDlg()));
+//        displayImage(applySettingsDlg(img, new BrightnessRGBDlg()));
 
+        // Contrast
+
+        displayImage(contrast(img,1.5f));
+//        displayImage(contrast(img,0.5f));
+        displayImage(contrast(brightnessV3(img,-40),1.5f),"Brightness+Contrast");
+
+        displayImage(contrastGamma(img,0.5d), "Gamma 1.5");
+
+        displayImage(applySettingsDlg(img, new GammaDlg()), "Contrast Gamma");
     }
 }

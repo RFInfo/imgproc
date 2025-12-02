@@ -278,4 +278,42 @@ public class ImageUtil {
         return outImg;
     }
 
+    public static BufferedImage contrast(BufferedImage inImg, float scale) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        short[] contrastLUT = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            contrastLUT[i] = (short) constrain(Math.round(scale * i));
+            System.out.println(i + " " + contrastLUT[i]);
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0, contrastLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg, outImg);
+
+        return outImg;
+    }
+
+    public static BufferedImage contrastGamma(BufferedImage inImg, double gamma) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        short[] contrastLUT = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+
+            double a = i / 255.0; // scale to [0.0 ... 1.0]
+            double b = Math.pow(a, 1.0/gamma); // aplicarea functiei gamma
+            double c = b * 255.0; // scale to [0 ... 255]
+
+            contrastLUT[i] = (short) constrain((int)Math.round(c));
+            System.out.println(i + " " + contrastLUT[i]);
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0, contrastLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg, outImg);
+
+        return outImg;
+    }
 }
