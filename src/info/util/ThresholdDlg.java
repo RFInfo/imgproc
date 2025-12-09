@@ -43,7 +43,7 @@ public class ThresholdDlg extends AbstractSettingsDialog{
         int val = slider1.getValue();
         textField1.setText(""+val);
 
-//        BufferedImage img = ImageUtil.threshold(originalImg, val);
-//        imagePanel.setImage(img);
+        BufferedImage img = ImageUtil.threshold(originalImg, val);
+        imagePanel.setImage(img);
     }
 }

@@ -19,12 +19,21 @@ public class TestHistogram {
         displayImage(histogramImage(img,2,256, 150), "BLUE");
 
         // histo luminosity
-        BufferedImage grayImg = toGray(img, 4);
-        displayImage(grayImg, "Gray");
+//        BufferedImage grayImg = toGray(img, 4);
+//        displayImage(grayImg, "Gray");
+//
+//        displayImage(histogramImage(grayImg,0,256, 150), "LUMINOSUTY");
 
-        displayImage(histogramImage(grayImg,0,256, 150), "LUMINOSUTY");
+//        BufferedImage contrastStretchImg = contrastStretch(grayImg);
+//        displayImage(contrastStretchImg, "Stretch");
+//        displayImage(histogramImage(contrastStretchImg,0,256, 150), "LUMINOSUTY Stretch");
 
-        BufferedImage contrastStretchImg = str
+        BufferedImage contrastStretchImg = contrastStretch(img);
+        displayImage(contrastStretchImg, "Stretch");
+        displayImage(histogramImage(contrastStretchImg,0,256, 150), "RED");
+        displayImage(histogramImage(contrastStretchImg,1,256, 150), "GREEN");
+        displayImage(histogramImage(contrastStretchImg,2,256, 150), "BLUE");
+
 
     }
 }

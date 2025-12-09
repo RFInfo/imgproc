@@ -3,9 +3,7 @@ package info.util;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.LookupOp;
-import java.awt.image.ShortLookupTable;
+import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -170,6 +168,9 @@ public class ImageUtil {
 // 2 - avg
 // 3 - usual
 // 4 - PAL
+        if(src.getRaster().getNumBands() == 1)
+            return src;
+
         BufferedImage dst = null;
         dst = new
                 BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
@@ -319,6 +320,118 @@ public class ImageUtil {
         return outImg;
     }
 
+    public static int normalize(int val, int oldMin, int oldMax, int newMin, int newMax){
+        double c = 1.0 * (newMax - newMin)/(oldMax - oldMin);
+        return (int)Math.round(c * (val-oldMin) + newMin);
+    }
+
+    // normalize a LUT
+    static void normalize(short[] lut, int newMin, int newMax) {
+        short max = Short.MIN_VALUE;
+        short min = Short.MAX_VALUE;
+
+        // find max and min
+        for (int i = 0; i < lut.length; i++) {
+            if (lut[i] > max)
+                max = lut[i];
+            if (lut[i] < min)
+                min = lut[i];
+        }
+
+        // (x-min)(255-0)/(max-min)+0
+        // (x-min)(newMax-newMin)/(max-min)+newMin
+        double c = 1.0 * (newMax - newMin) / (max - min);
+
+        System.out.println("\r\n"+"max= "+max+" min= "+min+" c= "+c );
+        // build output
+        for (int i = 0; i < lut.length; i++) {
+            lut[i] = (short) ((lut[i] - min) * c + newMin);
+            System.out.print(lut[i] + " ");
+        }
+        // System.out.println("\r\n"+"max= "+max+" min= "+min+" c= "+c );
+    }
+
+    public static BufferedImage contrastStretch(BufferedImage inImg){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(),inImg.getType());
+
+        short[][] contrastLUT = new short[inImg.getRaster().getNumBands()][256];
+
+        for (int band = 0; band < inImg.getRaster().getNumBands(); band++) {
+            int max = Integer.MIN_VALUE;
+            int min = Integer.MAX_VALUE;
+            int pixel;
+
+            // find max and min
+            for (int y = 0; y < inImg.getHeight(); y++)
+                for (int x = 0; x < inImg.getWidth(); x++) {
+                    pixel = inImg.getRaster().getSample(x,y,band);
+                    if(pixel > max)
+                        max = pixel;
+                    if(pixel < min)
+                        min = pixel;
+                }
+
+            System.out.println("min= " + min + " max= " + max);
+
+            for (int i = min; i <= max; i++) {
+                contrastLUT[band][i] = (short)normalize(i,min, max,0,255);
+            }
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0, contrastLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg, outImg);
+
+        return outImg;
+    }
+    public static BufferedImage threshold(BufferedImage inImg, int threshold) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+
+        short[] thresholdLUT = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            thresholdLUT[i] = (short) ((i < threshold) ? 0 : 255);
+            System.out.println(i + " " + thresholdLUT[i]);
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0, thresholdLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg, outImg);
+
+        return outImg;
+    }
+
+    public static BufferedImage negative(BufferedImage inImg) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        short[] negative = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            negative[i] = (short) (255 - i);
+            System.out.println(i + " " + negative[i]);
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0, negative);
+        LookupOp lookupOp = new LookupOp(shortLookupTable, null);
+        lookupOp.filter(inImg, outImg);
+
+        return outImg;
+    }
+
+    public static BufferedImage applyMask(BufferedImage inImage, BufferedImage maskImg) {
+        BufferedImage outImg = new BufferedImage(inImage.getWidth(), inImage.getHeight(), inImage.getType());
+
+        for (int y = 0; y < inImage.getHeight(); y++)
+            for (int x = 0; x < inImage.getWidth(); x++) {
+                if (maskImg.getRaster().getSample(x, y, 0) > 0) {
+                    int pixel = inImage.getRGB(x, y);
+                    outImg.setRGB(x, y, pixel);
+                }
+            }
+
+        return outImg;
+    }
+
     static public BufferedImage getBitPlane(BufferedImage inImg, int bitLevel){
         BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
 
@@ -384,6 +497,51 @@ public class ImageUtil {
         }
 
         g2.dispose();
+        return outImg;
+    }
+
+    public static BufferedImage convolutionSimple(BufferedImage inImg, Kernel kernel) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        // kernel properties
+        // kernel size 2n+1 x 2n+1
+        int kWidth = kernel.getWidth();
+        int kRadius = kWidth / 2;
+        float[] kData = kernel.getKernelData(null);
+        int kDataIndex = 0;
+
+        for (int band = 0; band < inImg.getRaster().getNumBands() && band < 3; band++)
+            for (int y = 0; y < inImg.getHeight(); y++)
+                for (int x = 0; x < inImg.getWidth(); x++) {
+
+                    float gray = 0;
+                    kDataIndex = 0;
+                    // summing neighborhood
+                    for (int ky = -kRadius; ky <= kRadius ; ky++)
+                        for (int kx = -kRadius; kx <= kRadius ; kx++){
+                            if((x+kx) < 0 || (x+kx) > inImg.getWidth()-1 || (y+ky) < 0 || (y+ky) > inImg.getHeight()-1){
+                                gray+=0;
+//                                gray += kData[kDataIndex] * inImg.getRaster().getSample(x, y, band);
+                            }
+                            else {
+                                gray+= kData[kDataIndex] * inImg.getRaster().getSample(x+kx,y+ky,band);
+                            }
+                            kDataIndex++;
+                        }
+                    outImg.getRaster().setSample(x,y,band,constrain(Math.round(gray)));
+
+                }
+
+        return outImg;
+    }
+
+    public static BufferedImage convolution(BufferedImage inImg, Kernel kernel) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+//        ConvolveOp convolveOp = new ConvolveOp(kernel,ConvolveOp.EDGE_NO_OP,null);
+        ConvolveOp convolveOp = new ConvolveOp(kernel,ConvolveOp.EDGE_ZERO_FILL,null);
+        convolveOp.filter(inImg,outImg);
+
         return outImg;
     }
 
