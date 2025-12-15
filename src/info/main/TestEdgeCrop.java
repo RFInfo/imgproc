@@ -32,7 +32,7 @@ public class TestEdgeCrop {
                 -1.0f, 4.0f, -1.0f,
                 0.0f, -1.0f, 0.0f};
 
-        BufferedImage grayImg = toGray(img, 4);
+        BufferedImage grayImg = toGray(img, GrayTransforms.GRAY_TRANSFORMS_PAL);
         displayImage(grayImg, "Gray");
 
         BufferedImage avgImg = convolutionSimple(grayImg, new Kernel(3,3,avg));
