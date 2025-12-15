@@ -12,8 +12,8 @@ import static info.util.ImageUtil.displayImage;
 public class TestEdgeCrop {
     public static void main(String[] args) {
 //        String fileName = "./test_images/lena_color_512.bmp";
-//        String fileName = "./test_images/rice.bmp";
-        String fileName = "./test_images/eight.bmp";
+        String fileName = "./test_images/rice.bmp";
+//        String fileName = "./test_images/eight.bmp";
 //        String fileName = "./test_images/halloween.png";
 
         BufferedImage img = loadImage(fileName);
@@ -32,7 +32,7 @@ public class TestEdgeCrop {
                 -1.0f, 4.0f, -1.0f,
                 0.0f, -1.0f, 0.0f};
 
-        BufferedImage grayImg = toGray(img, 4);
+        BufferedImage grayImg = toGray(img, GrayTransforms.GRAY_TRANSFORMS_PAL);
         displayImage(grayImg, "Gray");
 
         BufferedImage avgImg = convolutionSimple(grayImg, new Kernel(3,3,avg));

@@ -3,10 +3,12 @@ package info.util;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 public class ImageUtil {
 
@@ -61,7 +63,28 @@ public class ImageUtil {
         return imagePanel.getImage();
     }
 
-    public static BufferedImage extractBands(BufferedImage inImg, char band){
+    public static BufferedImage generateRandomPixels(int width, int height) {
+        BufferedImage outImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        Random rand = new Random();
+
+        for (int y = 0; y < outImg.getHeight(); y++)
+            for (int x = 0; x < outImg.getWidth(); x++) {
+
+//                int r = rand.nextInt(256);
+//                outImg.getRaster().setSample(x,y,0, r); // R
+//                outImg.getRaster().setSample(x,y,1, r); // G
+//                outImg.getRaster().setSample(x,y,2, r); // B
+
+                outImg.getRaster().setSample(x, y, 0, rand.nextInt(256)); // R
+                outImg.getRaster().setSample(x, y, 1, rand.nextInt(256)); // G
+                outImg.getRaster().setSample(x, y, 2, rand.nextInt(256)); // B
+            }
+
+        return outImg;
+    }
+
+    public static BufferedImage extractBand(BufferedImage inImg, char band){
         BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
 
         for (int y = 0; y < inImg.getHeight(); y++)
@@ -69,16 +92,16 @@ public class ImageUtil {
                 int pixel = inImg.getRGB(x, y);
 
                 int alpha = (pixel & 0xFF000000) >> 24; // (argb >> 24) & 0xff;
-                int red = (pixel & 0x00FF0000) >> 16; // (argb >> 16) & 0xff;
+                int red =   (pixel & 0x00FF0000) >> 16; // (argb >> 16) & 0xff;
                 int green = (pixel & 0x0000FF00) >> 8;  // (argb >> 8) & 0xff;
-                int blue = (pixel & 0x000000FF);       // (argb) & 0xff;
+                int blue =  (pixel & 0x000000FF);       // (argb) & 0xff;
 
                 // how to recompose?
                 // pixel = 0x00000000 | (alpha << 24) | (red << 16) | (green << 8) | blue;
 
+                // print first line
                 if (y == 0)
-                    System.out.println(alpha + " " + red + " " + green + " " + blue);
-
+                    System.out.print("(" + alpha + " " + red + " " + green + " " + blue + ") ");
 
                 switch (band) {
                     case 'A' -> outImg.getRaster().setSample(x, y, 0, alpha);
@@ -86,6 +109,18 @@ public class ImageUtil {
                     case 'G' -> outImg.getRaster().setSample(x, y, 0, green);
                     case 'B' -> outImg.getRaster().setSample(x, y, 0, blue);
                 }
+            }
+        return outImg;
+    }
+
+    public static BufferedImage extractBand2(BufferedImage inImg, int band) {
+
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+
+        for (int y = 0; y < outImg.getHeight(); y++)
+            for (int x = 0; x < outImg.getWidth(); x++) {
+                int val = inImg.getRaster().getSample(x, y, band);
+                outImg.getRaster().setSample(x, y, 0, val);
             }
 
         return outImg;
@@ -140,6 +175,32 @@ public class ImageUtil {
         return outImg;
     }
 
+    public static BufferedImage flipV(BufferedImage inImg) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getWidth(), inImg.getType());
+
+        for (int y = 0; y < outImg.getHeight() / 2; y++)
+            for (int x = 0; x < outImg.getWidth(); x++) {
+//                int pixel = inImg.getRGB(x,y);
+                outImg.setRGB(x, y, inImg.getRGB(x, (inImg.getHeight() - 1) - y));
+                outImg.setRGB(x, (inImg.getHeight() - 1) - y, inImg.getRGB(x, y));
+            }
+
+        return outImg;
+    }
+
+    public static BufferedImage flipH(BufferedImage inImg) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getWidth(), inImg.getType());
+
+        for (int y = 0; y < outImg.getHeight(); y++)
+            for (int x = 0; x < outImg.getWidth() / 2; x++) {
+//                int pixel = inImg.getRGB(x,y);
+                outImg.setRGB(x, y, inImg.getRGB((inImg.getWidth() - 1) - x, y));
+                outImg.setRGB((inImg.getWidth() - 1) - x, y, inImg.getRGB(x, y));
+            }
+
+        return outImg;
+    }
+
     public static int constrain(int val, int min, int max){
         return val > max ? max : (val < min ? min : val);
     }
@@ -148,7 +209,7 @@ public class ImageUtil {
         return constrain(val, 0, 255);
     }
 
-    public static BufferedImage toGray(BufferedImage input){
+    public static BufferedImage toGrayAVG(BufferedImage input){
         BufferedImage output = null;
         output = new
                 BufferedImage(input.getWidth(),input.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
@@ -162,50 +223,39 @@ public class ImageUtil {
         return output;
     }
 
-    public static BufferedImage toGray(BufferedImage src, int version){
-// 0 - g
-// 1 - sqrt
-// 2 - avg
-// 3 - usual
-// 4 - PAL
-        if(src.getRaster().getNumBands() == 1)
-            return src;
-
-        BufferedImage dst = null;
-        dst = new
-                BufferedImage(src.getWidth(),src.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
-        for(int y=0; y<src.getHeight(); y++)
-            for(int x=0; x<src.getWidth(); x++){
-                int r = src.getRaster().getSample(x,y,0);
-                int g = src.getRaster().getSample(x,y,1);
-                int b = src.getRaster().getSample(x,y,2);
-                int gray=0;
-                switch (version){
-                    case 0:{
-                        gray = g;
-                        break;
-                    }
-                    case 1:{
-                        gray = constrain((int)Math.round(Math.sqrt(r*r+b*b+g*g)));
-                        break;
-                    }
-                    case 2:{
-                        gray = (r+b+g)/3;
-                        break;
-                    }
-                    case 3:{
-                        gray = (3*r+4*b+2*g)/9;
-                        break;
-                    }
-                    case 4:{
-                        gray = (int)(0.299 * r + 0.587 * g + 0.114 * b);
-                        break;
-                    }
-                }
-                dst.getRaster().setSample(x,y,0,gray);
-            }
-        return dst;
+    public enum GrayTransforms {
+        GRAY_TRANSFORMS_GREEN, GRAY_TRANSFORMS_SQRT,
+        GRAY_TRANSFORMS_AVG, GRAY_TRANSFORMS_USUAL, GRAY_TRANSFORMS_PAL
     }
+
+    public static BufferedImage toGray(BufferedImage inImg, GrayTransforms version) {
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+        if (inImg.getType() == BufferedImage.TYPE_BYTE_GRAY) {
+            inImg.copyData(outImg.getRaster());
+            return outImg;
+        }
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+                int r = inImg.getRaster().getSample(x, y, 0);
+                int g = inImg.getRaster().getSample(x, y, 1);
+                int b = inImg.getRaster().getSample(x, y, 2);
+                int grayLevel = 0;
+                switch (version) {
+                    case GRAY_TRANSFORMS_GREEN -> grayLevel = g;
+                    case GRAY_TRANSFORMS_SQRT -> grayLevel =
+                            constrain((int) Math.round(Math.sqrt(r * r + g * g + b * b)));
+                    case GRAY_TRANSFORMS_AVG -> grayLevel =
+                            constrain((int) Math.round((double) (r + g + b) / 3));
+                    case GRAY_TRANSFORMS_USUAL -> grayLevel =
+                            constrain((int) Math.round((double) (3 * r + 2 * g + 4 * b) / 9));
+                    case GRAY_TRANSFORMS_PAL -> grayLevel =
+                            constrain((int) Math.round(0.299 * r + 0.587 * g + 0.114 * b));
+                }
+                outImg.getRaster().setSample(x, y, 0, grayLevel);
+            }
+        return outImg;
+    }
+
 
     public static BufferedImage brightnessV1(BufferedImage inImg, int offset){
         BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(),inImg.getType());
@@ -543,6 +593,107 @@ public class ImageUtil {
         convolveOp.filter(inImg,outImg);
 
         return outImg;
+    }
+
+    public static BufferedImage scale(BufferedImage src, double scaleX, double scaleY, int interpolation){
+        BufferedImage dst = null;
+
+        AffineTransform af = new AffineTransform();
+        af.scale(scaleX,scaleY);
+
+        int w = (int) (src.getWidth() * scaleX);
+        int h = (int) (src.getHeight() * scaleY);
+
+        dst = new BufferedImage(w,h,src.getType());
+
+        AffineTransformOp op = new AffineTransformOp(af, interpolation);
+        op.filter(src,dst);
+
+        return dst;
+    }
+
+    public static BufferedImage resize(BufferedImage src, int width, int height, int interpolation){
+        BufferedImage dst = null;
+
+        double scaleX = (double) width / src.getWidth();
+        double scaleY = (double) height / src.getHeight();
+
+        if(width > 0 && height > 0)
+            dst = scale(src,scaleX,scaleY,interpolation);
+        else if (width > 0 && height == 0)
+            dst = scale(src,scaleX,scaleX,interpolation);
+        else if(height > 0 && width == 0)
+            dst = scale(src,scaleY,scaleY,interpolation);
+        else
+            dst = src;
+
+        return dst;
+    }
+
+    public static BufferedImage rotate(BufferedImage src, double angle, int interpolation){
+        BufferedImage dst = null;
+        dst = new BufferedImage(src.getWidth(),src.getHeight(),src.getType());
+
+        double radian = angle * Math.PI/180;
+
+        AffineTransform af = new AffineTransform();
+
+        af.translate(src.getWidth()/2, src.getHeight()/2);
+        af.scale(0.5,0.5);
+        af.rotate(radian);
+        af.translate(-src.getWidth()/2, -src.getHeight()/2);
+
+        AffineTransformOp op = new AffineTransformOp(af, interpolation);
+        op.filter(src,dst);
+
+        return dst;
+    }
+
+    public static int otsuThreshold(BufferedImage src) {
+        int[] histogram = new int[256];
+        int total = src.getHeight() * src.getWidth();
+
+        for (int y = 0; y < src.getHeight(); y++)
+            for (int x = 0; x < src.getWidth(); x++) {
+                int gray = src.getRaster().getSample(x,y,0);
+                histogram[gray]++;
+            }
+
+        float sum = 0;
+        for (int i = 0; i < 256; i++) {
+            sum += i * histogram[i];
+        }
+
+        float sumB = 0;
+        int wB = 0;
+        int wF = 0;
+
+        float varMax = 0;
+        int threshold = 0;
+
+        for (int i = 0; i < 256; i++) {
+            wB += histogram[i];
+            if (wB == 0) {
+                continue;
+            }
+            wF = total - wB;
+
+            if (wF == 0) {
+                break;
+            }
+
+            sumB += i * histogram[i];
+            float mB = sumB / wB;
+            float mF = (sum - sumB) / wF;
+
+            float varBetween = (float) wB * (float) wF * (mB - mF) * (mB - mF);
+
+            if (varBetween > varMax) {
+                varMax = varBetween;
+                threshold = i;
+            }
+        }
+        return threshold;
     }
 
 }

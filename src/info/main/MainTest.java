@@ -14,54 +14,54 @@ public class MainTest {
         String fileName = "./test_images/lena_color_512.bmp";
 //        String fileName = "./test_images/halloween.png";
 
-        BufferedImage img = loadImage(fileName);
+        BufferedImage inImg = loadImage(fileName);
 
-        displayImage(img, "Original");
+        displayImage(inImg, "Original");
 
 
-//        displayImage(extractBands(img, 'R'), "Band R");
-//        displayImage(extractBands(img, 'G'), "Band G");
-//        displayImage(extractBands(img, 'B'), "Band B");
-//        displayImage(extractBands(img, 'A'), "Band A");
+//        displayImage(extractBands(inImg, 'R'), "Band R");
+//        displayImage(extractBands(inImg, 'G'), "Band G");
+//        displayImage(extractBands(inImg, 'B'), "Band B");
+//        displayImage(extractBands(inImg, 'A'), "Band A");
 
 //        displayImage(grayLevelGenerator(0,10,1, 600));
 
-//        displayImage(pixelate(img,64));
+//        displayImage(pixelate(inImg,64));
 
 
-//    displayImage(toGray(img), "ToGray");
+//    displayImage(toGray(inImg), "ToGray");
 
-//        displayImage(toGray(img,0),"Gray g");
-//        displayImage(toGray(img,1),"Gray sqrt");
-//        displayImage(toGray(img,2),"Gray Avg");
-//        displayImage(toGray(img,3),"Gray usual");
-//        displayImage(toGray(img,4),"Gray PAL");
+//        displayImage(toGray(inImg,0),"Gray g");
+//        displayImage(toGray(inImg,1),"Gray sqrt");
+//        displayImage(toGray(inImg,2),"Gray Avg");
+//        displayImage(toGray(inImg,3),"Gray usual");
+//        displayImage(toGray(inImg,4),"Gray PAL");
 
 // brightness
 
-//        displayImage(brightnessV1(img,150));
-//        displayImage(brightnessV2(img,-50));
-//        displayImage(brightnessV3(img,-50));
+//        displayImage(brightnessV1(inImg,150));
+//        displayImage(brightnessV2(inImg,-50));
+//        displayImage(brightnessV3(inImg,-50));
 
-//        BufferedImage img1 = brightnessV1(img,150);
+//        BufferedImage img1 = brightnessV1(inImg,150);
 //        BufferedImage img2 = brightnessV1(img1,-150);
 //        displayImage(img1);
 //        displayImage(img2);
 
-//        displayImage(applySettingsDlg(img, new BrightnessDlg()));
+//        displayImage(applySettingsDlg(inImg, new BrightnessDlg()));
 
-//        displayImage(brightnessRGB(img,-50,0,0));
+//        displayImage(brightnessRGB(inImg,-50,0,0));
 
-//        displayImage(applySettingsDlg(img, new BrightnessRGBDlg()));
+//        displayImage(applySettingsDlg(inImg, new BrightnessRGBDlg()));
 
         // Contrast
 
-        displayImage(contrast(img,1.5f));
-//        displayImage(contrast(img,0.5f));
-        displayImage(contrast(brightnessV3(img,-40),1.5f),"Brightness+Contrast");
+        displayImage(contrast(inImg,1.5f));
+//        displayImage(contrast(inImg,0.5f));
+        displayImage(contrast(brightnessV3(inImg,-40),1.5f),"Brightness+Contrast");
 
-        displayImage(contrastGamma(img,0.5d), "Gamma 1.5");
+        displayImage(contrastGamma(inImg,0.5d), "Gamma 1.5");
 
-        displayImage(applySettingsDlg(img, new GammaDlg()), "Contrast Gamma");
+        displayImage(applySettingsDlg(inImg, new GammaDlg()), "Contrast Gamma");
     }
 }

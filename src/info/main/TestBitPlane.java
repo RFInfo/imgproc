@@ -1,19 +1,18 @@
 package info.main;
 
 import java.awt.image.BufferedImage;
-
 import static info.util.ImageUtil.*;
+import static info.util.ImageUtil.GrayTransforms.*;
 
-public class TestBitPLane {
+public class TestBitPlane {
     public static void main(String[] args) {
         String fileName = "./test_images/lena_color_512.bmp";
-//        String fileName = "./test_images/halloween.png";
 
-        BufferedImage img = loadImage(fileName);
+        BufferedImage inImg = loadImage(fileName);
 
-        displayImage(img, "Original");
+        displayImage(inImg, "Original");
 
-        BufferedImage grayImg = toGray(img, 4);
+        BufferedImage grayImg = toGray(inImg, GRAY_TRANSFORMS_PAL);
         displayImage(grayImg, "Gray");
 
         displayImage(getBitPlane(grayImg,0), "BitPlane 0");
