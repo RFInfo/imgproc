@@ -17,8 +17,12 @@ public class MainTest {
 
         // extract bands / channels / components / elements
 //        displayImage(extractBands(testImg, 'A'), "Alpha");
-        displayImage(extractBands(testImg, 'R'), "Red");
-        displayImage(extractBands(testImg, 'G'), "Green");
-        displayImage(extractBands(testImg, 'B'), "Blue");
+//        displayImage(extractBands(testImg, 'R'), "Red");
+//        displayImage(extractBands(testImg, 'G'), "Green");
+//        displayImage(extractBands(testImg, 'B'), "Blue");
+
+        displayImage(flipV(testImg), "Flip Vertical");
+        displayImage(flipH(testImg), "Flip Horizontal");
+        displayImage(flipV(flipH(testImg)), "Flip Horizontal Vertical");
     }
 }

@@ -82,4 +82,31 @@ public class Utils {
             }
         return outImg;
     }
+
+    public static BufferedImage flipV(BufferedImage inImg){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        for (int y = 0; y < inImg.getHeight()/2; y++)
+            for (int x = 0; x < inImg.getWidth(); x++) {
+
+                outImg.setRGB(x, y, inImg.getRGB(x, inImg.getHeight()-1-y));
+                outImg.setRGB(x, inImg.getHeight()-1-y, inImg.getRGB(x,y));
+
+            }
+
+        return outImg;
+    }
+    public static BufferedImage flipH(BufferedImage inImg){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        for (int y = 0; y < inImg.getHeight(); y++)
+            for (int x = 0; x < inImg.getWidth()/2; x++) {
+
+                outImg.setRGB(x, y, inImg.getRGB(inImg.getWidth()-1-x, y));
+                outImg.setRGB(inImg.getWidth()-1-x, y, inImg.getRGB(x,y));
+
+            }
+
+        return outImg;
+    }
 }
