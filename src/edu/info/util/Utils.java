@@ -2,7 +2,9 @@ package edu.info.util;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -214,5 +216,12 @@ public class Utils {
         return outImg;
     }
 
-
+    public static BufferedImage toGrayscaleFast(BufferedImage src) {
+        BufferedImage gray = new BufferedImage(
+                src.getWidth(), src.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+        ColorConvertOp op = new ColorConvertOp(
+                ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        op.filter(src, gray);
+        return gray;
+    }
 }

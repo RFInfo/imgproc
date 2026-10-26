@@ -44,6 +44,9 @@ public class MainTest {
         displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_USUAL),"Gray usual");
         displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_PAL),"Gray PAL");
 
+        displayImage(toGrayscaleFast(testImg),"Gray Fast");
+
+
 
     }
 
