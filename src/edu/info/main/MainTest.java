@@ -17,9 +17,9 @@ public class MainTest {
 
         // extract bands / channels / components / elements
 //        displayImage(extractBands(testImg, 'A'), "Alpha");
-//        displayImage(extractBands(testImg, 'R'), "Red");
-//        displayImage(extractBands(testImg, 'G'), "Green");
-//        displayImage(extractBands(testImg, 'B'), "Blue");
+        displayImage(extractBands(testImg, 'R'), "Red");
+        displayImage(extractBands(testImg, 'G'), "Green");
+        displayImage(extractBands(testImg, 'B'), "Blue");
 
         // flip
 //        displayImage(flipV(testImg), "Flip Vertical");
@@ -33,7 +33,18 @@ public class MainTest {
 //        displayImage(pixelate(testImg,128), "Pixelate 128");
 
         // gray level 0 - 255
-        displayImage(grayLevelGenerator(0,40,1, 600), "GrayLevel");
+//        displayImage(grayLevelGenerator(0,40,1, 600), "GrayLevel");
+
+        // to gray
+//        displayImage(toGrayAVG(testImg), "To Gray AVG");
+
+        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_GREEN),"Gray g");
+        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_SQRT),"Gray sqrt");
+        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_AVG),"Gray Avg");
+        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_USUAL),"Gray usual");
+        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_PAL),"Gray PAL");
+
+
     }
 
 
