@@ -27,11 +27,15 @@ public class MainTest {
 //        displayImage(flipV(flipH(testImg)), "Flip Horizontal Vertical");
 
         // pixelate
-        displayImage(pixelate(testImg,4), "Pixelate 4");
-        displayImage(pixelate(testImg,16), "Pixelate 16");
-        displayImage(pixelate(testImg,32), "Pixelate 32");
-        displayImage(pixelate(testImg,128), "Pixelate 128");
+//        displayImage(pixelate(testImg,4), "Pixelate 4");
+//        displayImage(pixelate(testImg,16), "Pixelate 16");
+//        displayImage(pixelate(testImg,32), "Pixelate 32");
+//        displayImage(pixelate(testImg,128), "Pixelate 128");
+
+        // gray level 0 - 255
+        displayImage(grayLevelGenerator(0,40,1, 600), "GrayLevel");
     }
+
 
 
 }
