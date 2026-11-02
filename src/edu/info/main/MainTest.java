@@ -17,9 +17,9 @@ public class MainTest {
 
         // extract bands / channels / components / elements
 //        displayImage(extractBands(testImg, 'A'), "Alpha");
-        displayImage(extractBands(testImg, 'R'), "Red");
-        displayImage(extractBands(testImg, 'G'), "Green");
-        displayImage(extractBands(testImg, 'B'), "Blue");
+//        displayImage(extractBands(testImg, 'R'), "Red");
+//        displayImage(extractBands(testImg, 'G'), "Green");
+//        displayImage(extractBands(testImg, 'B'), "Blue");
 
         // flip
 //        displayImage(flipV(testImg), "Flip Vertical");
@@ -38,15 +38,20 @@ public class MainTest {
         // to gray
 //        displayImage(toGrayAVG(testImg), "To Gray AVG");
 
-        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_GREEN),"Gray g");
-        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_SQRT),"Gray sqrt");
-        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_AVG),"Gray Avg");
-        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_USUAL),"Gray usual");
-        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_PAL),"Gray PAL");
+//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_GREEN),"Gray g");
+//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_SQRT),"Gray sqrt");
+//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_AVG),"Gray Avg");
+//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_USUAL),"Gray usual");
+//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_PAL),"Gray PAL");
+//
+//        displayImage(toGrayscaleFast(testImg),"Gray Fast");
 
-        displayImage(toGrayscaleFast(testImg),"Gray Fast");
+    // brightness
+//        displayImage(brightnessV1(testImg, 50), "Brightness +50");
+//        displayImage(brightnessV1(testImg, -50), "Brightness -50");
 
-
+        displayImage(brightnessV2(testImg, 50), "Brightness +50");
+        displayImage(brightnessV2(testImg, -50), "Brightness -50");
 
     }
 

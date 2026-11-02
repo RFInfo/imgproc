@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
+import java.awt.image.LookupOp;
+import java.awt.image.ShortLookupTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -223,5 +225,57 @@ public class Utils {
                 ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
         op.filter(src, gray);
         return gray;
+    }
+
+    public static BufferedImage brightnessV1(BufferedImage inImg, int offset){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        for (int b = 0; b < inImg.getRaster().getNumBands(); b++)
+            for (int y = 0; y < inImg.getHeight(); y++)
+                for (int x = 0; x < inImg.getWidth(); x++) {
+                    int pixel = inImg.getRaster().getSample(x,y,b);
+                    pixel = constrain(pixel + offset);
+                    outImg.getRaster().setSample(x,y,b,pixel);
+                }
+
+        return outImg;
+    }
+
+    public static BufferedImage brightnessV2(BufferedImage inImg, int offset){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(), inImg.getHeight(), inImg.getType());
+
+        int[] brightnessLUT = new int[256];
+        for (int i = 0; i < brightnessLUT.length; i++) {
+            brightnessLUT[i] = constrain(i + offset);
+            System.out.print(brightnessLUT[i] + " ");
+        }
+        System.out.println();
+
+        for (int b = 0; b < inImg.getRaster().getNumBands(); b++)
+            for (int y = 0; y < inImg.getHeight(); y++)
+                for (int x = 0; x < inImg.getWidth(); x++) {
+                    int pixel = inImg.getRaster().getSample(x,y,b);
+                    pixel = brightnessLUT[pixel];
+                    outImg.getRaster().setSample(x,y,b,pixel);
+                }
+
+        return outImg;
+    }
+
+    public static BufferedImage brightnessV3(BufferedImage inImg, int offset){
+        BufferedImage outImg = new BufferedImage(inImg.getWidth(),inImg.getHeight(),inImg.getType());
+
+        short[] brightnessLUT = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            brightnessLUT[i] = (short)constrain(i+offset);
+            System.out.print(brightnessLUT[i] + " ");
+        }
+
+        ShortLookupTable shortLookupTable = new ShortLookupTable(0,brightnessLUT);
+        LookupOp lookupOp = new LookupOp(shortLookupTable,null);
+        lookupOp.filter(inImg,outImg);
+
+        return outImg;
     }
 }
