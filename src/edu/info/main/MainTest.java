@@ -13,67 +13,67 @@ public class MainTest {
         String fileName = "test_images/lena_color_512.bmp";
 //        String fileName = "test_images/halloween.png";
 
-        BufferedImage testImg = loadImage(fileName);
+        BufferedImage inImg = loadImage(fileName);
 
-        displayImage(testImg, "Primul test");
+        displayImage(inImg, "Primul test");
 
 //        displayImage(generateRandom(800,600), "Random pixels");
 
         // extract bands / channels / components / elements
-//        displayImage(extractBands(testImg, 'A'), "Alpha");
-//        displayImage(extractBands(testImg, 'R'), "Red");
-//        displayImage(extractBands(testImg, 'G'), "Green");
-//        displayImage(extractBands(testImg, 'B'), "Blue");
+//        displayImage(extractBands(inImg, 'A'), "Alpha");
+//        displayImage(extractBands(inImg, 'R'), "Red");
+//        displayImage(extractBands(inImg, 'G'), "Green");
+//        displayImage(extractBands(inImg, 'B'), "Blue");
 
         // flip
-//        displayImage(flipV(testImg), "Flip Vertical");
-//        displayImage(flipH(testImg), "Flip Horizontal");
-//        displayImage(flipV(flipH(testImg)), "Flip Horizontal Vertical");
+//        displayImage(flipV(inImg), "Flip Vertical");
+//        displayImage(flipH(inImg), "Flip Horizontal");
+//        displayImage(flipV(flipH(inImg)), "Flip Horizontal Vertical");
 
         // pixelate
-//        displayImage(pixelate(testImg,4), "Pixelate 4");
-//        displayImage(pixelate(testImg,16), "Pixelate 16");
-//        displayImage(pixelate(testImg,32), "Pixelate 32");
-//        displayImage(pixelate(testImg,128), "Pixelate 128");
+//        displayImage(pixelate(inImg,4), "Pixelate 4");
+//        displayImage(pixelate(inImg,16), "Pixelate 16");
+//        displayImage(pixelate(inImg,32), "Pixelate 32");
+//        displayImage(pixelate(inImg,128), "Pixelate 128");
 
         // gray level 0 - 255
 //        displayImage(grayLevelGenerator(0,40,1, 600), "GrayLevel");
 
         // to gray
-//        displayImage(toGrayAVG(testImg), "To Gray AVG");
+//        displayImage(toGrayAVG(inImg), "To Gray AVG");
 
-//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_GREEN),"Gray g");
-//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_SQRT),"Gray sqrt");
-//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_AVG),"Gray Avg");
-//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_USUAL),"Gray usual");
-//        displayImage(toGray(testImg,GrayTransforms.GRAY_TRANSFORMS_PAL),"Gray PAL");
+//        displayImage(toGray(inImg,GrayTransforms.GRAY_TRANSFORMS_GREEN),"Gray g");
+//        displayImage(toGray(inImg,GrayTransforms.GRAY_TRANSFORMS_SQRT),"Gray sqrt");
+//        displayImage(toGray(inImg,GrayTransforms.GRAY_TRANSFORMS_AVG),"Gray Avg");
+//        displayImage(toGray(inImg,GrayTransforms.GRAY_TRANSFORMS_USUAL),"Gray usual");
+//        displayImage(toGray(inImg,GrayTransforms.GRAY_TRANSFORMS_PAL),"Gray PAL");
 //
-//        displayImage(toGrayscaleFast(testImg),"Gray Fast");
+//        displayImage(toGrayscaleFast(inImg),"Gray Fast");
 
     // brightness
-//        displayImage(brightnessV1(testImg, 50), "Brightness +50");
-//        displayImage(brightnessV1(testImg, -50), "Brightness -50");
+//        displayImage(brightnessV1(inImg, 50), "Brightness +50");
+//        displayImage(brightnessV1(inImg, -50), "Brightness -50");
 
-//        displayImage(brightnessV2(testImg, 50), "Brightness +50");
-//        displayImage(brightnessV2(testImg, -50), "Brightness -50");
+//        displayImage(brightnessV2(inImg, 50), "Brightness +50");
+//        displayImage(brightnessV2(inImg, -50), "Brightness -50");
 
-//        displayImage(applySettingsDlg(testImg, new BrightnessDlg()));
+//        displayImage(applySettingsDlg(inImg, new BrightnessDlg()));
 
-//        displayImage(brightnessRGB(testImg,255,0,255));
+//        displayImage(brightnessRGB(inImg,255,0,255));
 
-//        displayImage(applySettingsDlg(testImg, new BrightnessRGBDlg()));
+//        displayImage(applySettingsDlg(inImg, new BrightnessRGBDlg()));
 
         // contrast
 
-//        displayImage(contrast(testImg,1.5f), "Contrast 1.5");
-//        displayImage(contrast(testImg,0.5f), "Contrast 0.5");
+//        displayImage(contrast(inImg,1.5f), "Contrast 1.5");
+//        displayImage(contrast(inImg,0.5f), "Contrast 0.5");
 
         // contrast gamma
 
-//        displayImage(contrastGamma(testImg, 0.5), "Gamma 0.5");
-//        displayImage(contrastGamma(testImg, 1.5), "Gamma 1.5");
+//        displayImage(contrastGamma(inImg, 0.5), "Gamma 0.5");
+//        displayImage(contrastGamma(inImg, 1.5), "Gamma 1.5");
 
-        displayImage(applySettingsDlg(testImg, new GammaDlg()));
+        displayImage(applySettingsDlg(inImg, new GammaDlg()));
 
     }
 
