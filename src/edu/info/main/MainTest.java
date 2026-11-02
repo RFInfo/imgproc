@@ -1,5 +1,7 @@
 package edu.info.main;
 
+import edu.info.util.BrightnessDlg;
+
 import java.awt.image.BufferedImage;
 
 import static edu.info.util.Utils.*;
@@ -50,8 +52,10 @@ public class MainTest {
 //        displayImage(brightnessV1(testImg, 50), "Brightness +50");
 //        displayImage(brightnessV1(testImg, -50), "Brightness -50");
 
-        displayImage(brightnessV2(testImg, 50), "Brightness +50");
-        displayImage(brightnessV2(testImg, -50), "Brightness -50");
+//        displayImage(brightnessV2(testImg, 50), "Brightness +50");
+//        displayImage(brightnessV2(testImg, -50), "Brightness -50");
+
+        displayImage(applySettingsDlg(testImg, new BrightnessDlg()));
 
     }
 

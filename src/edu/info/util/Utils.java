@@ -32,19 +32,37 @@ public class Utils {
         }
     }
 
-    public static void displayImage(BufferedImage image, String title){
-        if(image == null)
+    public static void displayImage(BufferedImage img, String ... title){
+        if(img == null)
             return;
-        JFrame frame = new JFrame(title);
+        JFrame frame = new JFrame(String.join(" - ", title));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         ImagePanel imagePanel = new ImagePanel();
         imagePanel.setFitToScreen(false);
-        imagePanel.setImage(image);
-
+        imagePanel.setImage(img);
         frame.setContentPane(new JScrollPane(imagePanel));
         frame.pack();
         frame.setVisible(true);
+    }
+
+
+    public static BufferedImage applySettingsDlg(BufferedImage img,
+                                                 AbstractSettingsDialog dialog) {
+        if (img == null)
+            return null;
+        JFrame frame = new JFrame();
+        ImagePanel imagePanel = new ImagePanel();
+        imagePanel.setFitToScreen(false);
+        imagePanel.setImage(img);
+        frame.setContentPane(new JScrollPane(imagePanel));
+        frame.pack();
+        frame.setVisible(true);
+        dialog.setImagePanel(imagePanel);
+        dialog.pack();
+        dialog.setVisible(true);
+        frame.dispose();
+        return imagePanel.getImage();
     }
 
     static public BufferedImage generateRandom(int width, int heigh){
