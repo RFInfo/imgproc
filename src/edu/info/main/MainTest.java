@@ -1,6 +1,8 @@
 package edu.info.main;
 
 import edu.info.util.BrightnessDlg;
+import edu.info.util.BrightnessRGBDlg;
+import edu.info.util.GammaDlg;
 
 import java.awt.image.BufferedImage;
 
@@ -55,7 +57,23 @@ public class MainTest {
 //        displayImage(brightnessV2(testImg, 50), "Brightness +50");
 //        displayImage(brightnessV2(testImg, -50), "Brightness -50");
 
-        displayImage(applySettingsDlg(testImg, new BrightnessDlg()));
+//        displayImage(applySettingsDlg(testImg, new BrightnessDlg()));
+
+//        displayImage(brightnessRGB(testImg,255,0,255));
+
+//        displayImage(applySettingsDlg(testImg, new BrightnessRGBDlg()));
+
+        // contrast
+
+//        displayImage(contrast(testImg,1.5f), "Contrast 1.5");
+//        displayImage(contrast(testImg,0.5f), "Contrast 0.5");
+
+        // contrast gamma
+
+//        displayImage(contrastGamma(testImg, 0.5), "Gamma 0.5");
+//        displayImage(contrastGamma(testImg, 1.5), "Gamma 1.5");
+
+        displayImage(applySettingsDlg(testImg, new GammaDlg()));
 
     }
 
