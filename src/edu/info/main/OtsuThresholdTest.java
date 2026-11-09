@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import static edu.info.util.Utils.*;
 
-public class TestOtsuThreshold {
+public class OtsuThresholdTest {
 
     public static void main(String[] args) {
 //        String fileName = "./test_images/lena_gray_512.bmp";
