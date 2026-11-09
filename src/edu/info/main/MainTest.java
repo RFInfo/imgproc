@@ -10,7 +10,9 @@ import static edu.info.util.Utils.*;
 
 public class MainTest {
     static void main() {
-        String fileName = "test_images/lena_color_512.bmp";
+//        String fileName = "test_images/lena_color_512.bmp";
+        String fileName = "test_images/lena_gray_512.bmp";
+//        String fileName = "test_images/Desert.jpg";
 //        String fileName = "test_images/halloween.png";
 
         BufferedImage inImg = loadImage(fileName);
@@ -73,7 +75,17 @@ public class MainTest {
 //        displayImage(contrastGamma(inImg, 0.5), "Gamma 0.5");
 //        displayImage(contrastGamma(inImg, 1.5), "Gamma 1.5");
 
-        displayImage(applySettingsDlg(inImg, new GammaDlg()));
+//        displayImage(applySettingsDlg(inImg, new GammaDlg()));
+
+        // contrast stretch
+        BufferedImage stretchImg = contrastStretch(inImg);
+        displayImage(stretchImg, "Contrast Stretch");
+
+        displayImage(contrastStretch(stretchImg), "Contrast Stretch");
+
+        // negativate
+//        displayImage(negative(inImg), "Negativate");
+        displayImage(negative(stretchImg), "Negativate");
 
     }
 
