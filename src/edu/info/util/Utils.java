@@ -540,4 +540,51 @@ public class Utils {
         g2.dispose();
         return outImg;
     }
+
+    public static int otsuThreshold(BufferedImage src) {
+        int[] histogram = new int[256];
+        int total = src.getHeight() * src.getWidth();
+
+        for (int y = 0; y < src.getHeight(); y++)
+            for (int x = 0; x < src.getWidth(); x++) {
+                int gray = src.getRaster().getSample(x,y,0);
+                histogram[gray]++;
+            }
+
+        float sum = 0;
+        for (int i = 0; i < 256; i++) {
+            sum += i * histogram[i];
+        }
+
+        float sumB = 0;
+        int wB = 0;
+        int wF = 0;
+
+        float varMax = 0;
+        int threshold = 0;
+
+        for (int i = 0; i < 256; i++) {
+            wB += histogram[i];
+            if (wB == 0) {
+                continue;
+            }
+            wF = total - wB;
+
+            if (wF == 0) {
+                break;
+            }
+
+            sumB += i * histogram[i];
+            float mB = sumB / wB;
+            float mF = (sum - sumB) / wF;
+
+            float varBetween = (float) wB * (float) wF * (mB - mF) * (mB - mF);
+
+            if (varBetween > varMax) {
+                varMax = varBetween;
+                threshold = i;
+            }
+        }
+        return threshold;
+    }
 }
